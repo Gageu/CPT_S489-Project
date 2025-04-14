@@ -1,0 +1,45 @@
+<%- include('header') %>
+
+<main class="container my-5">
+  <h2 class="mb-4">Edit Group</h2>
+  <form method="POST" action="/groups/<%= group.id %>/edit">
+    <div class="mb-3">
+      <label for="group-name" class="form-label">Group Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="group-name"
+        name="name"
+        value="<%= group.name %>"
+        required
+      >
+    </div>
+
+    <div class="mb-3">
+      <label for="subject" class="form-label">Subject</label>
+      <input
+        type="text"
+        class="form-control"
+        id="subject"
+        name="subject"
+        value="<%= group.subject %>"
+        required
+      >
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        name="description"
+        rows="3"
+        required
+      ><%= group.description %></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+  </form>
+</main>
+
+<%- include('footer') %>

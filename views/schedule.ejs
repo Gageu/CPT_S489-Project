@@ -1,0 +1,49 @@
+
+<%- include('header') %>
+
+<header class="bg-dark text-white text-center py-3">
+    <h1>Schedule Session</h1>
+</header>
+
+<main class="container my-5">
+
+  <% if (user && (user.email === group.owner_email || user.role === 'professor')) { %>
+    <h3>Create a New Session</h3>
+    <form method="POST" action="/groups/<%= group.id %>/sessions" class="mb-4">
+      <div class="mb-3">
+        <label for="title" class="form-label">Session Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label for="date" class="form-label">Date & Time</label>
+        <input type="text" class="form-control" id="date" name="date" placeholder="e.g. April 18, 6PM" required>
+      </div>
+      <button type="submit" class="btn btn-success">Create Session</button>
+    </form>
+  <% } %>
+
+  <h3 class="mt-5">Upcoming Sessions</h3>
+    
+  <% if (sessions.length === 0) { %>
+    <p>No sessions scheduled yet.</p>
+  <% } else { %>
+    <ul class="list-group">
+      <% sessions.forEach(session => { %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <%= session.title %> - <%= session.date %>
+          <form method="POST" action="/rsvp" class="m-0">
+            <input type="hidden" name="session_id" value="<%= session.id %>">
+            <button
+              type="submit"
+              class="btn btn-sm <%= attendingIds.includes(session.id) ? 'btn-success' : 'btn-outline-success' %>"
+            >
+              <%= attendingIds.includes(session.id) ? 'Attending' : 'RSVP' %>
+            </button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+</main>
+

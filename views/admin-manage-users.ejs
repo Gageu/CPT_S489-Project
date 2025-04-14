@@ -1,0 +1,71 @@
+
+<%- include('header') %>
+
+<header class="bg-dark text-white text-center py-3">
+    <h1>Admin: Manage Users</h1>
+</header>
+
+<main class="container my-5">
+    <h2>Add New User</h2>
+    <form method="POST" action="/admin/add-user">
+        <div class="mb-3">
+            <label for="new-username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="new-username" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select class="form-select" id="role">
+                <option value="student">Student</option>
+                <option value="professor">Professor</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Add User</button>
+    </form>
+
+    <h2 class="mt-5">Manage Existing Users</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(user => { %>
+              <tr>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td><%= user.role %></td>
+                <td><%= user.status %></td>
+                <td class="d-flex gap-2">
+                  <!-- Toggle Status -->
+                  <form method="POST" action="/admin/toggle-status">
+                    <input type="hidden" name="id" value="<%= user.id %>">
+                    <input type="hidden" name="currentStatus" value="<%= user.status %>">
+                    <button type="submit" class="btn btn-sm <%= user.status === 'active' ? 'btn-warning' : 'btn-success' %>">
+                      <%= user.status === 'active' ? 'Ban' : 'Unban' %>
+                    </button>
+                  </form>
+      
+                  <!-- Change Role -->
+                  <form method="POST" action="/admin/change-role" class="d-flex">
+                    <input type="hidden" name="id" value="<%= user.id %>">
+                    <select name="newRole" class="form-select form-select-sm me-2">
+                      <option value="student">Student</option>
+                      <option value="professor">Professor</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                    <button type="submit" class="btn btn-info btn-sm">Change</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+    </table>
+</main>
+
+<%- include('footer') %>

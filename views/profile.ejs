@@ -1,0 +1,35 @@
+<%- include('header') %>
+
+<main class="container my-5">
+  <h2>User Settings</h2>
+
+  <form action="/profile" method="POST">
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="username" 
+        value="<%= user.name %>" 
+        name="name"
+        required
+      >
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input 
+        type="email" 
+        class="form-control" 
+        id="email" 
+        value="<%= user.email %>" 
+        name="email"
+        required
+      >
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </form>
+</main>
+
+<%- include('footer') %>

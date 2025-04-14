@@ -1,0 +1,125 @@
+<%- include('header') %>
+
+
+<main class="container my-5">
+    <h2>Group Name: <%= group.name %></h2>
+    <p>Topic: <%= group.subject %></p>
+    <p>Owner: <%= group.owner %></p>
+    <p>Members:
+      <% if (members.length === 0) { %>
+        None yet
+      <% } else { %>
+        <%= members.map(member => member.name).join(", ") %>
+      <% } %>
+    </p>
+    
+
+    <a href="/groups/<%= group.id %>/edit" class="btn btn-success">Edit Group</a>
+
+    <h3>Invite Users</h3>
+    <form method="POST" action="/groups/<%= group.id %>/invite">
+      <input type="email" name="email" class="form-control mb-2" placeholder="Enter email to invite" required>
+      <button type="submit" class="btn btn-success">Send Invite</button>
+    </form>
+
+    <div class="mt-4">
+      <h4>Invite Link</h4>
+      <div class="input-group">
+        <input type="text" class="form-control" value="https://studygroup.com/invite/<%= group.id %>" readonly>
+        <button class="btn btn-outline-secondary"
+          onclick="navigator.clipboard.writeText('https://studygroup.com/invite/<%= group.id %>')">Copy Link</button>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <h4>Pending Invites</h4>
+      <% if (invites.length === 0) { %>
+        <p>No invites sent yet.</p>
+      <% } else { %>
+        <ul class="list-group">
+          <% invites.forEach(invite => { %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span><%= invite.email %></span>
+              <span class="badge bg-secondary"><%= invite.status %></span>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+
+    <hr>
+    <h3>Group Schedule</h3>
+
+    <!-- show session creation form for group owner and professors -->
+    <% if (user && (user.email === group.owner_email || user.role === 'professor')) { %>
+      <form method="POST" action="/groups/<%= group.id %>/sessions" class="mb-4">
+        <div class="mb-3">
+          <label for="title" class="form-label">Session Title</label>
+          <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="mb-3">
+          <label for="date" class="form-label">Date & Time</label>
+          <input type="text" class="form-control" id="date" name="date" required placeholder="e.g. April 25, 5PM">
+        </div>
+        <button type="submit" class="btn btn-success">Create Session</button>
+      </form>
+    <% } %>
+
+    <!-- list upcoming sessions -->
+    <% if (sessions.length === 0) { %>
+      <p>No sessions scheduled yet.</p>
+    <% } else { %>
+      <ul class="list-group">
+        <% sessions.forEach(session => { %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%= session.title %> - <%= session.date %>
+            <form method="POST" action="/rsvp" class="m-0">
+              <input type="hidden" name="session_id" value="<%= session.id %>">
+              <button
+                type="submit"
+                class="btn btn-sm <%= attendingIds.includes(session.id) ? 'btn-success' : 'btn-outline-success' %>"
+              >
+                <%= attendingIds.includes(session.id) ? 'Attending' : 'RSVP' %>
+              </button>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <hr>
+    <h3>Resources</h3>
+
+    <!-- show resource upload form only for professors or group owner -->
+    <% if (user) { %>
+      <form action="/groups/<%= group.id %>/resources" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="file-upload" class="form-label">Choose File</label>
+          <input type="file" class="form-control" id="file-upload" name="resource" required>
+        </div>
+        <button type="submit" class="btn btn-success">Upload</button>
+      </form>      
+    <% } %>
+
+    <!-- list of uploaded resources -->
+    <ul class="list-group">
+      <% resources.forEach(file => { %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span><%= file.filename %></span>
+          <div class="btn-group">
+            <a href="/uploads/<%= file.filename %>" class="btn btn-sm btn-success" download>Download</a>
+    
+            <% if (user.email === file.uploaded_by || user.email === group.owner_email || user.role === 'admin') { %>
+              <form method="POST" action="/groups/<%= group.id %>/resources/<%= file.id %>/delete" onsubmit="return confirm('Are you sure you want to delete this file?');">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            <% } %>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+    
+    
+</main>
+
+<%- include('footer') %>

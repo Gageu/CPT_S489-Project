@@ -1,0 +1,38 @@
+
+<%- include('header') %>
+
+<header class="bg-dark text-white text-center py-3">
+    <h1>Sign Up</h1>
+</header>
+
+<main class="container my-5">
+    <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-danger"><%= error %></div>
+      <% } %>      
+    <form method="POST" action="/signup">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select class="form-select" id="role" name="role" required>
+              <option value="student">Student</option>
+              <option value="professor">Professor</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Sign Up</button>
+    </form>
+</main>
+
+<%- include('footer') %>

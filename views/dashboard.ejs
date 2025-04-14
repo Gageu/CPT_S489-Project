@@ -1,0 +1,25 @@
+
+<%- include('header') %>
+
+<header class="bg-dark text-white text-center py-3">
+  <h1>Dashboard</h1>
+</header>
+
+<main class="container my-5">
+    <h2>Your Study Groups</h2>
+
+    <div class="list-group">
+      <% if (groups.length === 0) { %>
+        <p>You have no groups yet.</p>
+      <% } else { %>
+        <% groups.forEach(group => { %>
+          <a href="/groups/<%= group.id %>" class="list-group-item list-group-item-action">
+            <%= group.name %> - <%= group.subject %>
+          </a>
+        <% }) %>
+      <% } %>
+    </div>
+    
+</main>
+
+<%- include('footer') %>

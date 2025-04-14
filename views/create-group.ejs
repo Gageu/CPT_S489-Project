@@ -1,0 +1,41 @@
+
+<%- include('header') %>
+
+<header class="bg-dark text-white text-center py-3">
+    <h1>Create New Study Group</h1>
+</header>
+<main class="container my-5">
+  <form method="POST" action="/create-group">
+        <div class="mb-3">
+            <label for="group-name" class="form-label">Group Name</label>
+            <input type="text" class="form-control" id="group-name" name="name" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Privacy</label>
+          <select class="form-select" name="privacy">
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+          </select>          
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Role</label>
+          <input type="text" class="form-control" value="Owner" readonly>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Create Group</button>
+    </form>
+</main>
+
+<%- include('footer') %>

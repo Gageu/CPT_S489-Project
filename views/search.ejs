@@ -1,0 +1,47 @@
+<%- include('header') %>
+
+<header class="bg-dark text-white text-center py-3">
+    <h1>Search Study Groups</h1>
+</header>
+
+<main class="container my-5">
+    <form class="d-flex mb-4" method="POST" action="/search">
+        <input
+        class="form-control me-2"
+        type="search"
+        name="query"
+        placeholder="Search by group name or subject"
+        aria-label="Search"
+        required
+      >
+      <select class="form-select me-2" name="privacy">
+        <option value="all">All Groups</option>
+        <option value="public">Public</option>
+        <option value="private">Private</option>
+      </select>
+      <button class="btn btn-success" type="submit">Search</button>
+    </form>
+
+    <h4>Enter Access Code (for Private Groups)</h4>
+    <form method="POST" action="/join-group">
+      <input class="form-control mb-3" type="text" name="code" placeholder="Access Code" required>
+      <button class="btn btn-primary mb-4" type="submit">Join Group</button>
+    </form>
+
+    <h3>Search Results</h3>
+    <% if (results.length === 0) { %>
+      <p>No groups found.</p>
+    <% } else { %>
+      <ul class="list-group">
+        <% results.forEach(group => { %>
+          <li class="list-group-item">
+            <strong><%= group.name %></strong> - <%= group.subject %>
+            (<%= group.privacy %>)
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+    
+</main>
+
+<%- include('footer') %>
